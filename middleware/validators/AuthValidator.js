@@ -27,7 +27,7 @@ const AuthValidator = {
                     .errors(
                         req,
                         res,
-                        401,
+                        403,
                         errors
                     );
             next();
@@ -47,7 +47,7 @@ const AuthValidator = {
                     .errors(
                         req,
                         res,
-                        401,
+                        403,
                         errors
                     );
             next();
@@ -94,7 +94,7 @@ const AuthValidator = {
                     .errors(
                         req,
                         res,
-                        401,
+                        403,
                         errors
                     );
             next();
