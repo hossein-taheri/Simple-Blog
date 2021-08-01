@@ -1,15 +1,14 @@
 const express = require("express");
 const AuthController = require("../controller/AuthController");
+const AuthValidator = require("../middleware/validators/AuthValidator");
 const router = express.Router();
 
 
-router.post('/login', [], AuthController.login);
+router.post('/login', [AuthValidator.login], AuthController.login);
 
-router.post('/refresh/token', [], AuthController.refreshToken);
+router.post('/token/refresh', [AuthValidator.refreshToken], AuthController.refreshToken);
 
-router.post('/register', [], AuthController.register);
-
-router.post('/register/verify', [], AuthController.verifyRegister);
+router.post('/register', [AuthValidator.register], AuthController.register);
 
 
 module.exports = router;

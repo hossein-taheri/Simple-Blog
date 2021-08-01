@@ -11,11 +11,11 @@ const JWTAuth = {
                         req,
                         res,
                         401,
-                        'توکن به درستی وارد نشده است'
+                        "Incorrect token"
                     );
             } else {
                 JWT
-                    .verifyJWT(token)
+                    .verifyAccessToken(token)
                     .then(decoded => {
                         req.user_id = decoded.id;
                         next();
@@ -26,7 +26,7 @@ const JWTAuth = {
                                 req,
                                 res,
                                 401,
-                                'توکن به درستی وارد نشده است'
+                                "Incorrect token"
                             );
                     });
             }
@@ -36,7 +36,7 @@ const JWTAuth = {
                     req,
                     res,
                     401,
-                    'توکن به درستی وارد نشده است'
+                    "Incorrect token"
                 );
         }
     },
