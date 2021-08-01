@@ -1,6 +1,5 @@
 const JWT = require('../helpers/JWT');
 const ApiResponse = require('../helpers/responses/ApiResponse');
-// const User = require('../models/User') ;
 
 const JWTAuth = {
     check: (req, res, next) => {

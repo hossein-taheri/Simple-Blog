@@ -2,6 +2,9 @@ const AuthController = {
     login: (req, res) => {
 
     },
+    refreshToken: (req, res) => {
+
+    },
     register: (req, res) => {
 
     },
