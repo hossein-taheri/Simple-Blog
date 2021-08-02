@@ -19,7 +19,8 @@ const CommentSchema = new mongoose.Schema(
     },
     {
         timestamps: {
-            createdAt: 'createdAt'
+            createdAt: true,
+            updatedAt: false
         }
     },
 );

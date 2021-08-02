@@ -1,5 +1,6 @@
 const User = require("../model/User");
 const Post = require("../model/Post");
+const Comment = require("../model/Comment");
 const ApiResponse = require("../helpers/responses/ApiResponse");
 const PostController = {
     index: async (req, res) => {
@@ -88,7 +89,26 @@ const PostController = {
                     )
             }
 
-            //TODO :: add comments
+            post.comments = await Comment
+                .find({
+                        post: post._id
+                    },
+                    {},
+                    {
+                        sort: {
+                            createdAt: -1
+                        }
+                    }
+                )
+                .populate({
+                    path: 'user',
+                    select: [
+                        'first_name',
+                        'last_name'
+                    ]
+                })
+
+
             return ApiResponse
                 .message(
                     req,
