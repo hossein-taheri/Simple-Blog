@@ -1,6 +1,5 @@
 const JWTAuth = require('../../../middleware/JWTAuth');
 const JWT = require("../../../helpers/JWT");
-const jestMock = jest.fn();
 
 describe('Check method', () => {
     test('test must fails if token has not been set', async () => {
@@ -37,6 +36,7 @@ describe('Check method', () => {
                 authorization: 'Bearer 123',
             }
         }
+        const jestMock = jest.fn();
         JWT.verifyAccessToken = jestMock.mockRejectedValue(new Error("Token is not valid"))
 
         let res = {};
@@ -53,14 +53,15 @@ describe('Check method', () => {
                 authorization: 'Bearer 123',
             }
         }
+        const jestMock = jest.fn();
         JWT.verifyAccessToken = jestMock.mockResolvedValue({
             id: '12345'
         })
         let res = {};
-        await JWTAuth.check(req, res, () => {
-            expect(JWT.verifyAccessToken).toBeCalledWith('123');
-            expect(JWT.verifyAccessToken).toBeCalledTimes(1);
-            expect(req.user_id).toBe('12345');
-        })
-    });
+        await JWTAuth.check(req, res, () => {})
+
+        expect(JWT.verifyAccessToken).toBeCalledWith('123');
+        expect(JWT.verifyAccessToken).toBeCalledTimes(1);
+        expect(req.user_id).toBe('12345');
+    })
 })
