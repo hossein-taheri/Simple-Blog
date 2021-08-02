@@ -2,7 +2,7 @@ const {body, param, validationResult} = require('express-validator');
 const ApiResponse = require('../../helpers/responses/ApiResponse');
 const ObjectId = require('mongoose').Types.ObjectId;
 
-const AuthValidator = {
+const CommentValidator = {
     store: [
         param("post")
             .trim()
@@ -75,4 +75,4 @@ const AuthValidator = {
     ]
 }
 
-module.exports = AuthValidator;
+module.exports = CommentValidator;

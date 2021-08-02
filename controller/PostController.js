@@ -39,13 +39,13 @@ const PostController = {
                         }
                     }
                 )
-                .populate(
-                    'user',
-                    [
+                .populate({
+                    path: 'user',
+                    select: [
                         'first_name',
                         'last_name'
                     ]
-                )
+                })
                 .lean()
 
             return ApiResponse

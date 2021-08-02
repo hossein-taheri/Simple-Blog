@@ -2,7 +2,7 @@ const {body, param, query, validationResult} = require('express-validator');
 const ApiResponse = require('../../helpers/responses/ApiResponse');
 const ObjectId = require('mongoose').Types.ObjectId;
 
-const AuthValidator = {
+const PostValidator = {
     index: [
         query("page")
             .trim()
@@ -171,4 +171,4 @@ const AuthValidator = {
     ]
 }
 
-module.exports = AuthValidator;
+module.exports = PostValidator;
