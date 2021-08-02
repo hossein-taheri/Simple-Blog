@@ -2,8 +2,6 @@ const Errors = require('./Errors');
 
 const ApiResponse = {
     response: (req, res, status_code, messages, data) => {
-        res.status = status_code ;
-
         // if (global.areWeTestingWithJest) {
         if (process.env.JEST_WORKER_ID !== undefined) {
             return {
@@ -12,6 +10,7 @@ const ApiResponse = {
                 data: data,
             }
         } else {
+            res.status = status_code ;
             return res.json({
                 status: status_code,
                 messages: messages,
