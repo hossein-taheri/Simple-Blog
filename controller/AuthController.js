@@ -80,7 +80,7 @@ const AuthController = {
                 })
 
                 if (user) {
-                    let accessToken = JWT.issueAccessToken(user._id, user.role);
+                    let accessToken = JWT.issueAccessToken(user._id);
                     return ApiResponse.message(
                         req,
                         res,
@@ -136,7 +136,7 @@ const AuthController = {
                     register_at: Date.now(),
                 });
 
-            user = await user.save()
+            await user.save()
 
             return ApiResponse
                 .message(
