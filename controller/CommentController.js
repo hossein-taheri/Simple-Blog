@@ -37,7 +37,7 @@ const CommentController = {
                     req,
                     res,
                     "Comment created successfully",
-                    null
+                    comment
                 );
 
         } catch (err) {

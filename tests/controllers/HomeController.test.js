@@ -48,7 +48,16 @@ describe("Index method", () => {
         expect(res.status).toBe(200);
         expect(res.data[0].user.first_name).toBe(user.first_name);
         expect(res.data[0].user.last_name).toBe(user.last_name);
-        let slicedPosts = posts.slice(posts.length - 20, posts.length);
+        let slicedPosts = await Post.find({},
+            {},
+            {
+                skip: 0,
+                limit: 20,
+                sort: {
+                    createdAt: -1
+                }
+            }
+        )
         let slicedPostsIds = [];
         let expectedPostsIds = [];
         slicedPosts.forEach(post => {
@@ -71,7 +80,16 @@ describe("Index method", () => {
         expect(res.status).toBe(200);
         expect(res.data[0].user.first_name).toBe(user.first_name);
         expect(res.data[0].user.last_name).toBe(user.last_name);
-        let slicedPosts = posts.slice(posts.length - 24, posts.length - 20);
+        let slicedPosts = await Post.find({},
+            {},
+            {
+                skip: 20,
+                limit: 20,
+                sort: {
+                    createdAt: -1
+                }
+            }
+        )
         let slicedPostsIds = [];
         let expectedPostsIds = [];
         slicedPosts.forEach(post => {
