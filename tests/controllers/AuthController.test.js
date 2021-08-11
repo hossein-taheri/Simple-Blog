@@ -29,7 +29,11 @@ describe("Login method", () => {
         });
         user = await user.save();
     })
-
+    test('should fail if data has not entered at all', async () => {
+        let req = {}
+        let res = await AuthController.login(req, {})
+        expect(res.status).toBe(500)
+    })
     test('should fail if email is not correct', async () => {
         let req = {
             body: {
@@ -105,6 +109,22 @@ describe("RefreshToken method", () => {
         expect(res.status).toBe(500)
     })
 
+    test('should fail if user is not available', async () => {
+        let req = {
+            body: {
+                refresh_token: '123'
+            }
+        }
+
+        JWT.verifyRefreshToken = jest.fn().mockResolvedValue({
+            id: '61092ed9e2217127efa2a6e1'
+        })
+        let res = await AuthController.refreshToken(req, {})
+
+        expect(JWT.verifyRefreshToken).toBeCalledWith('123')
+        expect(res.status).toBe(406)
+    })
+
     test('should pass if refreshToken is correct', async () => {
         let req = {
             body: {
@@ -153,6 +173,17 @@ describe("Register method", () => {
         let res = await AuthController.register(req, {})
         expect(res.status).toBe(406)
     })
+
+    test('should fail if the data has not entered at all', async () => {
+        let req = {
+            body: {}
+        }
+
+        let res = await AuthController.register(req, {})
+
+        expect(res.status).toBe(500);
+    })
+
     test('should pass if the rest of the data is correct', async () => {
         let req = {
             body: {

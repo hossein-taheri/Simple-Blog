@@ -66,12 +66,13 @@ const AuthController = {
         try {
             let refreshToken = req.body.refresh_token;
             if (!refreshToken) {
-                return ApiResponse.error(
-                    req,
-                    res,
-                    406,
-                    "Enter the refresh token"
-                );
+                return ApiResponse
+                    .error(
+                        req,
+                        res,
+                        406,
+                        "Enter the refresh token"
+                    );
             } else {
                 let decoded = await JWT.verifyRefreshToken(refreshToken)
 
@@ -81,29 +82,32 @@ const AuthController = {
 
                 if (user) {
                     let accessToken = JWT.issueAccessToken(user._id);
-                    return ApiResponse.message(
-                        req,
-                        res,
-                        "The token was successfully refreshed",
-                        {
-                            AccessToken: accessToken
-                        }
-                    );
+                    return ApiResponse
+                        .message(
+                            req,
+                            res,
+                            "The token was successfully refreshed",
+                            {
+                                AccessToken: accessToken
+                            }
+                        );
                 } else {
-                    return ApiResponse.error(
-                        req,
-                        res,
-                        406,
-                        "The refresh token is incorrect"
-                    );
+                    return ApiResponse
+                        .error(
+                            req,
+                            res,
+                            406,
+                            "The refresh token is incorrect"
+                        );
                 }
             }
         } catch (err) {
-            return ApiResponse.serverError(
-                req,
-                res,
-                err
-            );
+            return ApiResponse
+                .serverError(
+                    req,
+                    res,
+                    err
+                );
         }
     },
     register: async (req, res) => {
@@ -146,11 +150,12 @@ const AuthController = {
                     null
                 );
         } catch (err) {
-            return ApiResponse.serverError(
-                req,
-                res,
-                err
-            );
+            return ApiResponse
+                .serverError(
+                    req,
+                    res,
+                    err
+                );
         }
     },
 }
