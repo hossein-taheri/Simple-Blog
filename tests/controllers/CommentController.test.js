@@ -48,6 +48,14 @@ describe("Store method", () => {
         post = await post.save()
     })
 
+    test('should fail if data has not entered at all', async () => {
+        let req = {}
+
+        let res = await CommentController.store(req, {});
+
+        expect(res.status).toBe(500)
+    })
+
     test('should fail if it write comment on a post that does not exist', async () => {
         let req = {
             user_id: second_user._id,
@@ -123,6 +131,15 @@ describe("Destroy method", () => {
         });
         comment = await comment.save();
     })
+
+    test("should fail if data has not entered at all", async () => {
+        let req = {}
+
+        let res = await CommentController.destroy(req, {});
+        
+        expect(res.status).toBe(500)
+    })
+
     test("should fail if delete a comment that does not exist", async () => {
         let req = {
             user_id: second_user._id,
@@ -134,6 +151,7 @@ describe("Destroy method", () => {
         let res = await CommentController.destroy(req, {});
         expect(res.status).toBe(404)
     })
+
     test("should fail if delete a comment that does not belong to user", async () => {
         let req = {
             user_id: first_user._id,
@@ -145,6 +163,7 @@ describe("Destroy method", () => {
         let res = await CommentController.destroy(req, {});
         expect(res.status).toBe(403)
     })
+
     test("should fail if delete a comment with another post id", async () => {
         let req = {
             user_id: second_user._id,
@@ -156,6 +175,7 @@ describe("Destroy method", () => {
         let res = await CommentController.destroy(req, {});
         expect(res.status).toBe(406)
     })
+
     test("should fail if delete a comment and check comment and post comment numbers", async () => {
         let req = {
             user_id: second_user._id,
