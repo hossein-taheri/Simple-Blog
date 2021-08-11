@@ -43,11 +43,15 @@ describe("Index method", () => {
         second_post = await second_post.save();
     })
 
+    test('should fail if data has not entered at all', async () => {
+        let res = await PostController.index({}, {});
+
+        expect(res.status).toBe(500);
+    })
+
     test('should fail if user does not exists', async () => {
         let req = {
-            query: {
-                page: 1
-            },
+            query: {},
             user_id: '6108e0c95c7a841b5afc19ed'
         }
 
@@ -55,6 +59,7 @@ describe("Index method", () => {
 
         expect(res.status).toBe(404);
     })
+
     test("should pass and return user's posts", async () => {
         let req = {
             query: {
@@ -98,6 +103,15 @@ describe("Show method", () => {
     })
 
 
+    test('should fail if data has not entered at all', async () => {
+        let req = {}
+
+        let res = await PostController.show(req, {})
+
+        expect(res.status).toBe(500);
+
+    })
+
     test('should fail if post does not exist', async () => {
         let req = {
             params: {
@@ -109,6 +123,7 @@ describe("Show method", () => {
         expect(res.status).toBe(404);
 
     })
+
     test('should pass otherwise', async () => {
         let req = {
             params: {
@@ -137,6 +152,14 @@ describe("Store method", () => {
             salt: 'test_salt'
         });
         user = await user.save();
+    })
+
+    test("should fail if the data has not entered at all", async () => {
+        let req = {}
+
+        let res = await PostController.store(req, {})
+
+        expect(res.status).toBe(500);
     })
 
     test("should pass if the data is correct", async () => {
@@ -185,6 +208,14 @@ describe("Update method", () => {
         post = await post.save();
     })
 
+    test("should fail if data does not entered at all", async () => {
+        let req = {}
+
+        let res = await PostController.update(req, {});
+
+        expect(res.status).toBe(500)
+    })
+
     test("should fail if post does not exist", async () => {
         let req = {
             user_id: user._id,
@@ -195,6 +226,7 @@ describe("Update method", () => {
         let res = await PostController.update(req, {});
         expect(res.status).toBe(404)
     })
+
     test("should fail if user is not post's author", async () => {
         let req = {
             user_id: "6108f8ad2e99ef4486674de1",
@@ -205,6 +237,7 @@ describe("Update method", () => {
         let res = await PostController.update(req, {});
         expect(res.status).toBe(403)
     })
+
     test("should pass otherwise", async () => {
         let req = {
             user_id: user._id,
@@ -251,6 +284,14 @@ describe("Destroy method", () => {
     })
 
 
+    test("should fail if data does not entered at all", async () => {
+        let req = {}
+
+        let res = await PostController.destroy(req, {});
+
+        expect(res.status).toBe(500)
+    })
+
     test("should fail if post does not exist", async () => {
         let req = {
             user_id: user._id,
@@ -261,6 +302,7 @@ describe("Destroy method", () => {
         let res = await PostController.destroy(req, {});
         expect(res.status).toBe(404)
     })
+
     test("should fail if user is not post's author", async () => {
         let req = {
             user_id: "6108f8ad2e99ef4486674de1",
@@ -271,6 +313,7 @@ describe("Destroy method", () => {
         let res = await PostController.destroy(req, {});
         expect(res.status).toBe(403)
     })
+
     test("should pass otherwise", async () => {
         let req = {
             user_id: user._id,
@@ -280,7 +323,7 @@ describe("Destroy method", () => {
         }
         let res = await PostController.destroy(req, {});
         expect(res.status).toBe(200)
-        let deleted_post = await Post.findOne({_id : req.params.post});
+        let deleted_post = await Post.findOne({_id: req.params.post});
         expect(deleted_post).toBe(null);
     })
 
