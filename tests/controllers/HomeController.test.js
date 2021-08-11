@@ -1,4 +1,4 @@
-const database = require("../bootstrap/database");
+const database = require("../bootstrap/test_database_connection");
 const User = require("../../model/User");
 const Post = require("../../model/Post");
 const HomeController = require("../../controller/HomeController");

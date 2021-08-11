@@ -9,9 +9,9 @@ router.get('/show/:post', [PostValidator.show], PostController.show);
 
 router.post('/store', [PostValidator.store], PostController.store);
 
-router.post('/update/:post', [PostValidator.update], PostController.update);
+router.patch('/update/:post', [PostValidator.update], PostController.update);
 
-router.post('/destroy/:post', [PostValidator.destroy], PostController.destroy);
+router.delete('/destroy/:post', [PostValidator.destroy], PostController.destroy);
 
 
 module.exports = router;
