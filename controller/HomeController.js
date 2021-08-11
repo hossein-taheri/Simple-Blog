@@ -7,6 +7,9 @@ const HomeController = {
             if (!page) {
                 page = 1;
             }
+            if (!Number.isInteger(page)) {
+                throw new Error('Page must be integer');
+            }
 
             let posts = await Post
                 .find({},

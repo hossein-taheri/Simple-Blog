@@ -101,6 +101,18 @@ describe("Index method", () => {
         expect(slicedPostsIds.sort().toString()).toBe(expectedPostsIds.sort().toString())
     })
 
+    test('should fail if page has not entered correctly', async () => {
+        let req = {
+            query: {
+                page: "ABC"
+            }
+        };
+
+        let res = await HomeController.index(req, {});
+
+        expect(res.status).toBe(500);
+    })
+
     afterAll(async () => {
         await User.deleteMany({})
         await Post.deleteMany({})
