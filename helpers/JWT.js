@@ -23,7 +23,7 @@ const JWT = {
     verifyAccessToken : ( token ) => {
         return new Promise((resolve, reject) => {
             const verifyOptions = {
-                expiresIn: "1d",
+                expiresIn: "1h",
                 algorithm: "RS256"
             };
             jsonwebtoken.verify(token, publicKEY, verifyOptions, (err, decoded) => {
@@ -44,7 +44,7 @@ const JWT = {
         } ;
         const payload = {
             id : id,
-            type : 'RefreshToken'
+            type : "RefreshToken"
         } ;
         const signedToken = jsonwebtoken.sign( payload , privateKEY ,  signOptions ) ;
 
@@ -64,7 +64,7 @@ const JWT = {
                     reject(err);
                 }
                 if (decoded.type !== "RefreshToken"){
-                    reject(new Error('Token is not an access token'))
+                    reject(new Error("Token is not a refresh token"))
                 }
                 resolve(decoded);
             });
