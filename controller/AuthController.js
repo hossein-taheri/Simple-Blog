@@ -6,7 +6,7 @@ const {InternalServerErrors} = require("../helpers/CustomErrors");
 const {NotAcceptable} = require("../helpers/CustomErrors");
 const {NotFound} = require("../helpers/CustomErrors");
 const AuthController = {
-    login: async (req, res, next) => {
+    login: async (req, res) => {
         try {
             let user = await User
                 .findOne({
@@ -14,13 +14,7 @@ const AuthController = {
                 })
 
             if (!user) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        406,
-                        "Incorrect email or password"
-                    );
+                throw new NotAcceptable("Incorrect email or password");
             }
 
             const passwordIsValid = Password
@@ -32,13 +26,7 @@ const AuthController = {
 
 
             if (!passwordIsValid) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        406,
-                        "Incorrect email or password"
-                    );
+                throw new NotAcceptable("Incorrect email or password");
             }
 
 
@@ -66,45 +54,35 @@ const AuthController = {
                 )
         }
     },
-    refreshToken: async (req, res, next) => {
+    refreshToken: async (req, res) => {
         try {
             let refreshToken = req.body.refresh_token;
             if (!refreshToken) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        406,
-                        "Enter the refresh token"
-                    );
-            } else {
-                let decoded = await JWT.verifyRefreshToken(refreshToken)
-
-                let user = await User.findOne({
-                    _id: decoded.id,
-                })
-
-                if (user) {
-                    let accessToken = JWT.issueAccessToken(user._id);
-                    return ApiResponse
-                        .message(
-                            req,
-                            res,
-                            "The token was successfully refreshed",
-                            {
-                                AccessToken: accessToken
-                            }
-                        );
-                } else {
-                    return ApiResponse
-                        .error(
-                            req,
-                            res,
-                            406,
-                            "The refresh token is incorrect"
-                        );
-                }
+                throw new NotAcceptable("Enter the refresh token");
             }
+
+            let decoded = await JWT.verifyRefreshToken(refreshToken)
+
+            let user = await User.findOne({
+                _id: decoded.id,
+            })
+
+            if (!user) {
+                throw new NotAcceptable("The refresh token is incorrect");
+            }
+
+            let accessToken = JWT.issueAccessToken(user._id);
+
+            return ApiResponse
+                .message(
+                    req,
+                    res,
+                    "The token was successfully refreshed",
+                    {
+                        AccessToken: accessToken
+                    }
+                );
+
         } catch (err) {
             return ApiResponse
                 .error(
@@ -115,7 +93,7 @@ const AuthController = {
                 )
         }
     },
-    register: async (req, res, next) => {
+    register: async (req, res) => {
         try {
             let user = await User
                 .findOne({
@@ -124,16 +102,10 @@ const AuthController = {
 
 
             if (user && (user.email.toString() === req.body.email.toString())) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        406,
-                        "The entered email already has selected"
-                    );
+                throw new NotAcceptable("The entered email already has selected");
             }
 
-            if (!req.body.password){
+            if (!req.body.password) {
                 throw new InternalServerErrors("The entered password is not correct")
             }
 
@@ -159,12 +131,11 @@ const AuthController = {
                     null
                 );
         } catch (err) {
-            console.log(err)
             return ApiResponse
                 .error(
                     req,
                     res,
-                    (err.code ? err.code : 500),
+                    err.code || 500,
                     err.message
                 )
         }

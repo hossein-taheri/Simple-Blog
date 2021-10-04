@@ -2,8 +2,10 @@ const User = require("../model/User");
 const Post = require("../model/Post");
 const Comment = require("../model/Comment");
 const ApiResponse = require("../helpers/responses/ApiResponse");
+const {NotFound} = require("../helpers/CustomErrors");
+const {Forbidden} = require("../helpers/CustomErrors");
 const PostController = {
-    index: async (req, res, next) => {
+    index: async (req, res) => {
         try {
             let page = req.query.page;
             if (!page) {
@@ -16,13 +18,7 @@ const PostController = {
                 })
 
             if (!user) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        404,
-                        "User not found"
-                    )
+                throw new NotFound("User not found")
             }
 
 
@@ -65,7 +61,7 @@ const PostController = {
                 )
         }
     },
-    show: async (req, res, next) => {
+    show: async (req, res) => {
         try {
             let post = await Post
                 .findOne({
@@ -81,13 +77,7 @@ const PostController = {
                 .lean()
 
             if (!post) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        404,
-                        'Post not found'
-                    )
+                throw new NotFound("Post not found")
             }
 
             post.comments = await Comment
@@ -128,7 +118,7 @@ const PostController = {
                 )
         }
     },
-    store: async (req, res, next) => {
+    store: async (req, res) => {
         try {
             let images = [];
 
@@ -162,7 +152,7 @@ const PostController = {
                 )
         }
     },
-    update: async (req, res, next) => {
+    update: async (req, res) => {
         try {
             let post = await Post
                 .findOne({
@@ -170,23 +160,11 @@ const PostController = {
                 })
 
             if (!post) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        404,
-                        'Post not found'
-                    )
+                throw new NotFound("Post not found")
             }
 
             if (post.user.toString() !== req.user_id.toString()) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        403,
-                        "Access denied"
-                    )
+                throw new Forbidden("Access denied")
             }
 
             let properties = [
@@ -220,7 +198,7 @@ const PostController = {
                 )
         }
     },
-    destroy: async (req, res, next) => {
+    destroy: async (req, res) => {
         try {
             let post = await Post
                 .findOne({
@@ -228,23 +206,11 @@ const PostController = {
                 })
 
             if (!post) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        404,
-                        'Post not found'
-                    )
+                throw new NotFound("Post not found")
             }
 
             if (post.user.toString() !== req.user_id.toString()) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        403,
-                        "Access denied"
-                    )
+                throw new Forbidden("Access denied")
             }
 
             await post.delete()

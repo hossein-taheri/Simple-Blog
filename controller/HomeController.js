@@ -1,7 +1,7 @@
 const Post = require("../model/Post");
 const ApiResponse = require("../helpers/responses/ApiResponse");
 const HomeController = {
-    index: async (req, res, next) => {
+    index: async (req, res) => {
         try {
             let page = req.query.page;
             if (!page) {

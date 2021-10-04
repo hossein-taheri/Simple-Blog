@@ -1,9 +1,12 @@
 const ApiResponse = require("../helpers/responses/ApiResponse");
 const Post = require("../model/Post");
 const Comment = require("../model/Comment");
+const {NotAcceptable} = require("../helpers/CustomErrors");
+const {Forbidden} = require("../helpers/CustomErrors");
+const {NotFound} = require("../helpers/CustomErrors");
 
 const CommentController = {
-    store: async (req, res, next) => {
+    store: async (req, res) => {
         try {
             let post = await Post
                 .findOne({
@@ -11,13 +14,7 @@ const CommentController = {
                 })
 
             if (!post) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        404,
-                        "Post not found"
-                    );
+                throw new NotFound("Post not found")
             }
 
             let comment = new Comment({
@@ -39,7 +36,6 @@ const CommentController = {
                     "Comment created successfully",
                     comment
                 );
-
         } catch (err) {
             return ApiResponse
                 .error(
@@ -50,7 +46,7 @@ const CommentController = {
                 )
         }
     },
-    destroy: async (req, res, next) => {
+    destroy: async (req, res) => {
         try {
             let comment = await Comment
                 .findOne({
@@ -59,33 +55,15 @@ const CommentController = {
                 .populate('post')
 
             if (!comment) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        404,
-                        "Comment not found"
-                    );
+                throw new NotFound("Comment not found")
             }
 
             if (comment.user.toString() !== req.user_id.toString()) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        403,
-                        "Access denied"
-                    );
+                throw new Forbidden("Access denied")
             }
 
             if (comment.post._id.toString() !== req.params.post.toString()) {
-                return ApiResponse
-                    .error(
-                        req,
-                        res,
-                        406,
-                        "Comment and post do not match"
-                    );
+                throw new NotAcceptable("Comment and post do not match")
             }
 
             comment.post.commentsNumber--;
@@ -103,8 +81,6 @@ const CommentController = {
                     "Comment deleted successfully",
                     null
                 );
-
-
         } catch (err) {
             return ApiResponse
                 .error(
