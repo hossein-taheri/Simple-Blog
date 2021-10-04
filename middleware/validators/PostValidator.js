@@ -12,16 +12,16 @@ const PostValidator = {
             .isInt({min: 1})
             .bail(),
         (req, res, next) => {
-            let errors = validationResult(req);
+            const errors = validationResult(req);
             if (!errors.isEmpty())
                 return ApiResponse
-                    .errors(
+                    .ExpressValidatorError(
                         req,
                         res,
-                        403,
                         errors
-                    );
-            next();
+                    )
+            else
+                next();
         },
     ],
     show: [
@@ -40,13 +40,13 @@ const PostValidator = {
             const errors = validationResult(req);
             if (!errors.isEmpty())
                 return ApiResponse
-                    .errors(
+                    .ExpressValidatorError(
                         req,
                         res,
-                        403,
                         errors
-                    );
-            next();
+                    )
+            else
+                next();
         },
     ],
     store: [
@@ -81,13 +81,13 @@ const PostValidator = {
             const errors = validationResult(req);
             if (!errors.isEmpty())
                 return ApiResponse
-                    .errors(
+                    .ExpressValidatorError(
                         req,
                         res,
-                        403,
                         errors
-                    );
-            next();
+                    )
+            else
+                next();
         },
     ],
     update: [
@@ -135,13 +135,13 @@ const PostValidator = {
             const errors = validationResult(req);
             if (!errors.isEmpty())
                 return ApiResponse
-                    .errors(
+                    .ExpressValidatorError(
                         req,
                         res,
-                        403,
                         errors
-                    );
-            next();
+                    )
+            else
+                next();
         },
     ],
     destroy: [
@@ -160,13 +160,13 @@ const PostValidator = {
             const errors = validationResult(req);
             if (!errors.isEmpty())
                 return ApiResponse
-                    .errors(
+                    .ExpressValidatorError(
                         req,
                         res,
-                        403,
                         errors
-                    );
-            next();
+                    )
+            else
+                next();
         },
     ]
 }

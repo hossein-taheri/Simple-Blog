@@ -1,7 +1,7 @@
 const ApiResponse = require("../helpers/responses/ApiResponse");
 
 const UploadController = {
-    uploadImage: (req, res) => {
+    uploadImage: (req, res, next) => {
         try {
             if (req.files) {
                 let fileNames = [];
@@ -26,11 +26,12 @@ const UploadController = {
             }
         } catch (err) {
             return ApiResponse
-                .serverError(
+                .error(
                     req,
                     res,
-                    err,
-                );
+                    err.code || 500,
+                    err.message
+                )
         }
     }
 }

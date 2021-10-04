@@ -24,13 +24,13 @@ const AuthValidator = {
             const errors = validationResult(req);
             if (!errors.isEmpty())
                 return ApiResponse
-                    .errors(
+                    .ExpressValidatorError(
                         req,
                         res,
-                        403,
                         errors
-                    );
-            next();
+                    )
+            else
+                next();
         },
     ],
     refreshToken: [
@@ -44,13 +44,13 @@ const AuthValidator = {
             const errors = validationResult(req);
             if (!errors.isEmpty())
                 return ApiResponse
-                    .errors(
+                    .ExpressValidatorError(
                         req,
                         res,
-                        403,
                         errors
-                    );
-            next();
+                    )
+            else
+                next();
         },
     ],
     register: [
@@ -91,13 +91,13 @@ const AuthValidator = {
             const errors = validationResult(req);
             if (!errors.isEmpty())
                 return ApiResponse
-                    .errors(
+                    .ExpressValidatorError(
                         req,
                         res,
-                        403,
                         errors
-                    );
-            next();
+                    )
+            else
+                next();
         },
     ],
 

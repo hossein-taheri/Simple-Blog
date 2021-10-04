@@ -2,8 +2,11 @@ const User = require("../model/User");
 const ApiResponse = require("../helpers/responses/ApiResponse");
 const JWT = require("../helpers/JWT");
 const Password = require("../helpers/Password");
+const {InternalServerErrors} = require("../helpers/CustomErrors");
+const {NotAcceptable} = require("../helpers/CustomErrors");
+const {NotFound} = require("../helpers/CustomErrors");
 const AuthController = {
-    login: async (req, res) => {
+    login: async (req, res, next) => {
         try {
             let user = await User
                 .findOne({
@@ -55,14 +58,15 @@ const AuthController = {
                 );
         } catch (err) {
             return ApiResponse
-                .serverError(
+                .error(
                     req,
                     res,
-                    err
-                );
+                    err.code || 500,
+                    err.message
+                )
         }
     },
-    refreshToken: async (req, res) => {
+    refreshToken: async (req, res, next) => {
         try {
             let refreshToken = req.body.refresh_token;
             if (!refreshToken) {
@@ -103,14 +107,15 @@ const AuthController = {
             }
         } catch (err) {
             return ApiResponse
-                .serverError(
+                .error(
                     req,
                     res,
-                    err
-                );
+                    err.code || 500,
+                    err.message
+                )
         }
     },
-    register: async (req, res) => {
+    register: async (req, res, next) => {
         try {
             let user = await User
                 .findOne({
@@ -126,6 +131,10 @@ const AuthController = {
                         406,
                         "The entered email already has selected"
                     );
+            }
+
+            if (!req.body.password){
+                throw new InternalServerErrors("The entered password is not correct")
             }
 
             let password = Password.genPassword(req.body.password)
@@ -150,12 +159,14 @@ const AuthController = {
                     null
                 );
         } catch (err) {
+            console.log(err)
             return ApiResponse
-                .serverError(
+                .error(
                     req,
                     res,
-                    err
-                );
+                    (err.code ? err.code : 500),
+                    err.message
+                )
         }
     },
 }

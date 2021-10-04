@@ -10,7 +10,7 @@ const ApiResponse = {
                 data: data,
             }
         } else {
-            res.status = status_code ;
+            res.status = status_code;
             return res.json({
                 status: status_code,
                 messages: messages,
@@ -18,34 +18,14 @@ const ApiResponse = {
             });
         }
     },
-    errors: (req, res, err_code, err_messages) => {
+    error: (req, res, err_code, ...err_messages) => {
         return ApiResponse
             .response(
                 req,
                 res,
                 err_code,
-                Errors.errors(err_messages),
+                err_messages,
                 null
-            )
-    },
-    error: (req, res, err_code, err_message) => {
-        return ApiResponse
-            .response(
-                req,
-                res,
-                err_code,
-                Errors.error(err_message),
-                null
-            );
-    },
-    serverError: (req, res, err) => {
-        console.log(err.message)
-        return ApiResponse
-            .error(
-                req,
-                res,
-                500,
-                Errors.serverError()
             );
     },
     message: (req, res, message, data) => {
@@ -54,9 +34,18 @@ const ApiResponse = {
                 req,
                 res,
                 200,
-                Errors.message(message),
+                (message ? [message] : []),
                 data
             );
+    },
+    ExpressValidatorError: (req, res, err_messages) => {
+        return ApiResponse
+            .error(
+                req,
+                res,
+                400,
+                err_messages.array(),
+            )
     }
 }
 

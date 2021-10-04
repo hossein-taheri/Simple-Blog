@@ -1,7 +1,7 @@
 const Post = require("../model/Post");
 const ApiResponse = require("../helpers/responses/ApiResponse");
 const HomeController = {
-    index: async (req, res) => {
+    index: async (req, res, next) => {
         try {
             let page = req.query.page;
             if (!page) {
@@ -40,11 +40,12 @@ const HomeController = {
                 );
         } catch (err) {
             return ApiResponse
-                .serverError(
+                .error(
                     req,
                     res,
-                    err
-                );
+                    err.code || 500,
+                    err.message
+                )
         }
     }
 

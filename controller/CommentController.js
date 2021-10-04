@@ -3,7 +3,7 @@ const Post = require("../model/Post");
 const Comment = require("../model/Comment");
 
 const CommentController = {
-    store: async (req, res) => {
+    store: async (req, res, next) => {
         try {
             let post = await Post
                 .findOne({
@@ -42,14 +42,15 @@ const CommentController = {
 
         } catch (err) {
             return ApiResponse
-                .serverError(
+                .error(
                     req,
                     res,
-                    err
-                );
+                    err.code || 500,
+                    err.message
+                )
         }
     },
-    destroy: async (req, res) => {
+    destroy: async (req, res, next) => {
         try {
             let comment = await Comment
                 .findOne({
@@ -106,11 +107,12 @@ const CommentController = {
 
         } catch (err) {
             return ApiResponse
-                .serverError(
+                .error(
                     req,
                     res,
-                    err
-                );
+                    err.code || 500,
+                    err.message
+                )
         }
     }
 }

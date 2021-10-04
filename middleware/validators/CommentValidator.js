@@ -28,13 +28,13 @@ const CommentValidator = {
             const errors = validationResult(req);
             if (!errors.isEmpty())
                 return ApiResponse
-                    .errors(
+                    .ExpressValidatorError(
                         req,
                         res,
-                        403,
                         errors
-                    );
-            next();
+                    )
+            else
+                next();
         },
     ],
     destroy: [
@@ -64,13 +64,13 @@ const CommentValidator = {
             const errors = validationResult(req);
             if (!errors.isEmpty())
                 return ApiResponse
-                    .errors(
+                    .ExpressValidatorError(
                         req,
                         res,
-                        403,
                         errors
-                    );
-            next();
+                    )
+            else
+                next();
         },
     ]
 }
