@@ -6,7 +6,7 @@ const {Forbidden} = require("../helpers/CustomErrors");
 const {NotFound} = require("../helpers/CustomErrors");
 
 const CommentController = {
-    store: async (req, res) => {
+    store: async (req, res, next) => {
         try {
             let post = await Post
                 .findOne({
@@ -37,16 +37,10 @@ const CommentController = {
                     comment
                 );
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     },
-    destroy: async (req, res) => {
+    destroy: async (req, res, next) => {
         try {
             let comment = await Comment
                 .findOne({
@@ -82,13 +76,7 @@ const CommentController = {
                     null
                 );
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     }
 }

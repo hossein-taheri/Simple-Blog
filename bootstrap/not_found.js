@@ -1,13 +1,8 @@
 const ApiResponse = require("../helpers/responses/ApiResponse");
+const {NotFound} = require("../helpers/CustomErrors");
 module.exports = (app) => {
     //If request is here , then no route has not been found
     app.use((req, res) => {
-        return ApiResponse
-            .error(
-                req,
-                res,
-                404,
-                'Not found'
-            )
+        throw new NotFound('Route Not found')
     });
 }

@@ -16,5 +16,8 @@ require('./bootstrap/router')(app) ;
 //404 config
 require('./bootstrap/not_found')(app) ;
 
+//error handler
+require('./bootstrap/error_handler')(app) ;
+
 //listening config
 require('./bootstrap/listening')(app) ;

@@ -1,5 +1,4 @@
 const JWT = require('../helpers/JWT');
-const ApiResponse = require('../helpers/responses/ApiResponse');
 const {Unauthorized} = require("../helpers/CustomErrors");
 
 const JWTAuth = {
@@ -21,13 +20,7 @@ const JWTAuth = {
 
             next();
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 401,
-                    err.message
-                )
+            next(err)
         }
     },
 }

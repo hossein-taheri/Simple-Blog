@@ -2,7 +2,7 @@ const ApiResponse = require("../helpers/responses/ApiResponse");
 const {NotAcceptable} = require("../helpers/CustomErrors");
 
 const UploadController = {
-    uploadImage: (req, res) => {
+    uploadImage: (req, res, next) => {
         try {
             if (!req.files) {
                 throw new NotAcceptable("Enter the files")
@@ -21,13 +21,7 @@ const UploadController = {
                 );
 
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     }
 }

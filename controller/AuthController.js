@@ -6,7 +6,7 @@ const {InternalServerErrors} = require("../helpers/CustomErrors");
 const {NotAcceptable} = require("../helpers/CustomErrors");
 const {NotFound} = require("../helpers/CustomErrors");
 const AuthController = {
-    login: async (req, res) => {
+    login: async (req, res, next) => {
         try {
             let user = await User
                 .findOne({
@@ -45,16 +45,10 @@ const AuthController = {
                     }
                 );
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     },
-    refreshToken: async (req, res) => {
+    refreshToken: async (req, res, next) => {
         try {
             let refreshToken = req.body.refresh_token;
             if (!refreshToken) {
@@ -84,16 +78,10 @@ const AuthController = {
                 );
 
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     },
-    register: async (req, res) => {
+    register: async (req, res, next) => {
         try {
             let user = await User
                 .findOne({
@@ -131,13 +119,7 @@ const AuthController = {
                     null
                 );
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     },
 }

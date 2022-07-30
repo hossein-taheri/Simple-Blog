@@ -5,7 +5,7 @@ const ApiResponse = require("../helpers/responses/ApiResponse");
 const {NotFound} = require("../helpers/CustomErrors");
 const {Forbidden} = require("../helpers/CustomErrors");
 const PostController = {
-    index: async (req, res) => {
+    index: async (req, res, next) => {
         try {
             let page = req.query.page;
             if (!page) {
@@ -52,16 +52,10 @@ const PostController = {
                     posts
                 );
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     },
-    show: async (req, res) => {
+    show: async (req, res, next) => {
         try {
             let post = await Post
                 .findOne({
@@ -109,16 +103,10 @@ const PostController = {
                 )
 
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     },
-    store: async (req, res) => {
+    store: async (req, res, next) => {
         try {
             let images = [];
 
@@ -143,16 +131,10 @@ const PostController = {
                     post
                 );
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     },
-    update: async (req, res) => {
+    update: async (req, res, next) => {
         try {
             let post = await Post
                 .findOne({
@@ -189,16 +171,10 @@ const PostController = {
                     post
                 );
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     },
-    destroy: async (req, res) => {
+    destroy: async (req, res, next) => {
         try {
             let post = await Post
                 .findOne({
@@ -223,13 +199,7 @@ const PostController = {
                     null
                 );
         } catch (err) {
-            return ApiResponse
-                .error(
-                    req,
-                    res,
-                    err.code || 500,
-                    err.message
-                )
+            next(err);
         }
     },
 }
